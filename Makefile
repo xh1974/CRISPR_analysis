@@ -10,7 +10,8 @@ INCLUDES = -I./include
 
 # define the C source files
 APIS = ./src/rngs.c ./src/words.c ./src/rvgs.c ./src/math_api.c 
-MAIN = ./src/RRA.c
+MAIN1 = ./src/RRA.c 
+MAIN2 = ./src/CrisprNorm.c
 
 # define the C object files 
 #
@@ -21,10 +22,12 @@ MAIN = ./src/RRA.c
 # with the .o suffix
 #
 API_OBJS = $(APIS:.c=.o)
-MAIN_OBJS = $(MAIN:.c=.o)
+MAIN1_OBJS = $(MAIN1:.c=.o)
+MAIN2_OBJS = $(MAIN2:.c=.o)
 
 # define the executable file 
-MAIN_APP = ./bin/RRA
+MAIN1_APP = ./bin/RRA
+MAIN2_APP = ./bin/CrisprNorm
 
 #
 # The following part of the makefile is generic; it can be used to 
@@ -32,10 +35,13 @@ MAIN_APP = ./bin/RRA
 # deleting dependencies appended to the file from 'make depend'
 #
 
-all:    $(MAIN_APP) 
+all:    $(MAIN1_APP) $(MAIN2_APP)
 
-$(MAIN_APP): $(API_OBJS) $(MAIN_OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN_APP) $(API_OBJS) $(MAIN_OBJS) -lm 
+$(MAIN1_APP): $(API_OBJS) $(MAIN1_OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN1_APP) $(API_OBJS) $(MAIN1_OBJS) -lm 
+
+$(MAIN2_APP): $(API_OBJS) $(MAIN2_OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN2_APP) $(API_OBJS) $(MAIN2_OBJS) -lm 
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
@@ -45,7 +51,7 @@ $(MAIN_APP): $(API_OBJS) $(MAIN_OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
-	$(RM) $(API_OBJS) $(MAIN_OBJS) 
+	$(RM) $(API_OBJS) $(MAIN1_OBJS) $(MAIN2_OBJS)
 
 depend: $(SRCS)
 	makedepend $(INCLUDES) $^

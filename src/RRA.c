@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
+
+#define NDEBUG
 #include <assert.h>
 #include "math_api.h"
 #include "words.h"
@@ -90,7 +92,7 @@ int main (int argc, const char * argv[])
 	
 	inputFileName[0] = 0;
 	outputFileName[0] = 0;
-	maxPercentile = 0.25;
+	maxPercentile = 0.1;
 	
 	for (i=2;i<argc;i++)
 	{
@@ -207,9 +209,9 @@ void PrintCommandUsage(const char *command)
 	printf("usage:\n");
 	printf("-i <input data file>. Format: <item id> <group id> <list id> <value>\n");
 	printf("-o <output file>. Format: <group id> <number of items in the group> <lo-value> <false discovery rate>\n");
-	printf("-p <maximum percentile>. RRA only consider the items with percentile smaller than this parameter. Default=0.25\n");
+	printf("-p <maximum percentile>. RRA only consider the items with percentile smaller than this parameter. Default=0.1\n");
 	printf("example:\n");
-	printf("%s -i input.txt -o output.txt -p 0.25 \n", command);
+	printf("%s -i input.txt -o output.txt -p 0.1 \n", command);
 	
 }
 
@@ -256,6 +258,8 @@ int ReadFile(char *fileName, GROUP_STRUCT *groups, int maxGroupNum, int *groupNu
 	
 	if (wordNum != 4)
 	{
+		free(tmpS);
+		FreeWords(words,255);
 		printf("Input file format: <item id> <group id> <list id> <value>\n");
 		return -1;
 	}
